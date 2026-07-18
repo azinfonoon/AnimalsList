@@ -1,5 +1,4 @@
 import { useState } from "react";
-import AnimalItem from "./AnimalItem"; // وارد کردن کامپوننت جدید
 
 const animals = [
   { id: 1, name: "گربه", sound: "/Sounds/cat-sound1.mp3", text: "میوووو!" },
@@ -9,40 +8,64 @@ const animals = [
 ];
 
 const AnimalsList = () => {
-  const [randomMessage, setRandomMessage] = useState("");
+  const [randomSoundText, setRandomSoundText] = useState("");
+  
+  // مرحله سوم: ایجاد یک وضعیت برای ذخیره تعداد پخش هر حیوان
+  // مقدار اولیه: برای هر ID حیوان، عدد 0 را در نظر می‌گیریم
+  const [counts, setCounts] = useState({
+    1: 0, // گربه
+    2: 0, // سگ
+    3: 0, // گاو
+    4: 0  // مرغ
+  });
 
-  const playRandom = () => {
+  const playRandomSound = () => {
     const randomIndex = Math.floor(Math.random() * animals.length);
-    const selected = animals[randomIndex];
-    
-    const audio = new Audio(selected.sound);
-    audio.play().catch(e => console.log("خطای پخش تصادفی:", e));
-    
-    setRandomMessage(`الان صدای ${selected.name} پخش شد!`);
+    const selectedAnimal = animals[randomIndex];
+
+    // پخش صدا
+    const audio = new Audio(selectedAnimal.sound);
+    audio.play().catch(e => console.log("خطا در پخش:", e));
+
+    // نمایش متن صدای تصادفی
+    setRandomSoundText(`${selectedAnimal.name} - ${selectedAnimal.text}`);
+
+    // --- مرحله سوم: آپدیت کردن شمارنده حیوان انتخاب شده ---
+    setCounts((prevCounts) => ({
+      ...prevCounts, // مقادیر قبلی را نگه دار
+      [selectedAnimal.id]: prevCounts[selectedAnimal.id] + 1 // فقط به تعداد حیوان فعلی یکی اضافه کن
+    }));
   };
 
   return (
     <div>
       <h2>لیست حیوانات</h2>
-      
-      {/* نمایش لیست حیوانات با استفاده از کامپوننت جداگانه */}
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
+      {animals.map((animal) => (
+        <div key={animal.id}>
+          {animal.name} - {animal.text}
+        </div>
+      ))}
+
+      <br />
+      <button onClick={playRandomSound} style={{ padding: "10px", cursor: "pointer" }}>
+        پخش تصادفی صدای حیوان
+      </button>
+
+      {randomSoundText && (
+        <div style={{ marginTop: "20px", color: "blue" }}>
+          <strong>صدای انتخاب شده: {randomSoundText}</strong>
+        </div>
+      )}
+
+      {/* --- نمایش بخش جدید آمار پخش (مرحله سوم) --- */}
+      <div style={{ marginTop: "30px", borderTop: "1px solid #ccc", paddingTop: "10px" }}>
+        <h3>آمار پخش صداها:</h3>
         {animals.map((animal) => (
-          <AnimalItem 
-            key={animal.id} 
-            name={animal.name} 
-            sound={animal.sound} 
-            text={animal.text} 
-          />
+          <p key={animal.id}>
+            صدای {animal.name}: {counts[animal.id]} بار
+          </p>
         ))}
       </div>
-
-      <hr />
-      <button onClick={playRandom} style={{ padding: "10px 20px", fontSize: "18px", backgroundColor: "gold" }}>
-        شانسی یکی رو پخش کن!
-      </button>
-      
-      {randomMessage && <p><strong>{randomMessage}</strong></p>}
     </div>
   );
 };
