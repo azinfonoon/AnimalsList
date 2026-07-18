@@ -1,7 +1,7 @@
 const AnimalItem = ({ name, sound, text }) => {
   
   const playSound = () => {
-    // ایجاد شیء صوتی
+   
     const audio = new Audio(sound);
     
    

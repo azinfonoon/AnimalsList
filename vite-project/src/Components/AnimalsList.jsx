@@ -10,8 +10,8 @@ const animals = [
 const AnimalsList = () => {
   const [randomSoundText, setRandomSoundText] = useState("");
   
-  // مرحله سوم: ایجاد یک وضعیت برای ذخیره تعداد پخش هر حیوان
-  // مقدار اولیه: برای هر ID حیوان، عدد 0 را در نظر می‌گیریم
+ 
+  
   const [counts, setCounts] = useState({
     1: 0, // گربه
     2: 0, // سگ
@@ -23,14 +23,14 @@ const AnimalsList = () => {
     const randomIndex = Math.floor(Math.random() * animals.length);
     const selectedAnimal = animals[randomIndex];
 
-    // پخش صدا
+  
     const audio = new Audio(selectedAnimal.sound);
     audio.play().catch(e => console.log("خطا در پخش:", e));
 
-    // نمایش متن صدای تصادفی
+  
     setRandomSoundText(`${selectedAnimal.name} - ${selectedAnimal.text}`);
 
-    // --- مرحله سوم: آپدیت کردن شمارنده حیوان انتخاب شده ---
+    
     setCounts((prevCounts) => ({
       ...prevCounts, // مقادیر قبلی را نگه دار
       [selectedAnimal.id]: prevCounts[selectedAnimal.id] + 1 // فقط به تعداد حیوان فعلی یکی اضافه کن
@@ -57,7 +57,7 @@ const AnimalsList = () => {
         </div>
       )}
 
-      {/* --- نمایش بخش جدید آمار پخش (مرحله سوم) --- */}
+  
       <div style={{ marginTop: "30px", borderTop: "1px solid #ccc", paddingTop: "10px" }}>
         <h3>آمار پخش صداها:</h3>
         {animals.map((animal) => (
